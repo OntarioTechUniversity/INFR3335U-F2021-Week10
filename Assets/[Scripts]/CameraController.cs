@@ -11,8 +11,9 @@ public class CameraController : MonoBehaviour
     public float maxSpeed = 10.0f;
     public Vector3 velocity;
 
-    [Header("Panel Controls")] 
-    public GameObject panel;
+    [Header("OnScreen Controls")] 
+    public Joystick leftJoystick;
+    public Joystick rightJoystick;
 
     private float XAxisRotation = 0.0f;
     private float YAxisRotation = 0.0f;
@@ -29,8 +30,8 @@ public class CameraController : MonoBehaviour
     private void MouseLook()
     {
         // get input from the mouse
-        mouse.x = Input.GetAxis("Mouse X") * sensitivity;
-        mouse.y = Input.GetAxis("Mouse Y") * sensitivity;
+        mouse.x = (Input.GetAxis("Mouse X") * sensitivity) + rightJoystick.Horizontal;
+        mouse.y = (Input.GetAxis("Mouse Y") * sensitivity) + rightJoystick.Vertical;
 
         // look up and down
         XAxisRotation -= mouse.y;
@@ -45,8 +46,8 @@ public class CameraController : MonoBehaviour
 
     private void Move()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
+        float x = Input.GetAxisRaw("Horizontal") + leftJoystick.Horizontal;
+        float y = Input.GetAxisRaw("Vertical") + leftJoystick.Vertical;
         float z = Input.GetAxisRaw("Up");
 
         Vector3 moveForward =  Vector3.MoveTowards(Vector3.zero, transform.forward * maxSpeed, y * maxSpeed * Time.deltaTime);
